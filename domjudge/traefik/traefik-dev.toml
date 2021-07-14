@@ -11,6 +11,7 @@
 
 [retry]
 
+# TODO This can be weakened for dev deployments - but not much use I guess?
 [TLSOptions]
   [TLSOptions.default]
     minVersion = "VersionTLS12"

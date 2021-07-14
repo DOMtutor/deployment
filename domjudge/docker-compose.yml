@@ -42,10 +42,11 @@ services:
     labels:
       traefik.enable: true
 
-      # TODO Check if judgehosts support https
+      # TODO Check if judgehosts support https / open this only on local deployments?
       traefik.http.routers.domjudge-api.rule: Host(`${DOMJUDGE_HOST:-domjudge.ist.ac.at}`) && PathPrefix(`/api`)
       traefik.http.routers.domjudge-api.entrypoints: http
 
+      # TODO Enable HTTP redirect on deployment
       # traefik.http.routers.domjudge-http.rule: Host(`${DOMJUDGE_HOST:-domjudge.ist.ac.at}`)
       # traefik.http.routers.domjudge-http.entrypoints: http
       # traefik.http.middlewares.domjudge-http.redirectscheme.scheme: https
@@ -72,4 +73,3 @@ services:
       - ./traefik/${TRAEFIK_CONFIG:-traefik.toml}:/traefik.toml:ro
       - ./traefik-data:/acme/:rw
     restart: unless-stopped
-
