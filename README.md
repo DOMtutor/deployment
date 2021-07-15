@@ -1,9 +1,5 @@
 Repository containing all infrastructure for the IST DOMjudge instance.
 
-# TODO
-
- * Backup for mariadb
-
 # Folders
 
  * `domjudge`: Contains docker-compose and related for the publicly reachable DOMjudge instance
