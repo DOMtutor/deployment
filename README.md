@@ -17,7 +17,7 @@ Repository containing all infrastructure for the IST DOMjudge instance.
       docker exec -it domserver cat /opt/domjudge/domserver/etc/restapi.secret
     ```
     to obtain the secrets later.
-  * Run `DOMSERVER_PROTOCOL=http JUDGEDAEMON_PASSWORD=<judgehost secret> docker-compose up -d judgehost-<number>` to start a local instance
+  * Run `DOMJUDGE_PROTOCOL=http JUDGEDAEMON_PASSWORD=<judgehost secret> docker-compose up -d judgehost-<number>` to start a local instance
 
 
 # Deployment

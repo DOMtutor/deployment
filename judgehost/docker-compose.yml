@@ -6,6 +6,7 @@ services:
     container_name: judgehost-1
     image: domjudge/judgehost:7.3.3
     hostname: judgedaemon-1
+    privileged: True
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     environment:
@@ -13,11 +14,12 @@ services:
       CONTAINER_TIMEZONE: Europe/Vienna
       JUDGEDAEMON_USERNAME: judgehost
       JUDGEDAEMON_PASSWORD: ${JUDGEDAEMON_PASSWORD:?}
-      DOMSERVER_BASEURL: ${DOMSERVER_PROTOCOL:-https}://${DOMSERVER_URL:?}
+      DOMSERVER_BASEURL: ${DOMJUDGE_PROTOCOL:-https}://${DOMJUDGE_HOST:?}/
   judgehost-2:
     container_name: judgehost-2
     image: domjudge/judgehost:7.3.3
     hostname: judgedaemon-2
+    privileged: True
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     environment:
@@ -25,11 +27,12 @@ services:
       CONTAINER_TIMEZONE: Europe/Vienna
       JUDGEDAEMON_USERNAME: judgehost
       JUDGEDAEMON_PASSWORD: ${JUDGEDAEMON_PASSWORD:?}
-      DOMSERVER_BASEURL: ${DOMSERVER_PROTOCOL:-https}://${DOMSERVER_URL:?}
+      DOMSERVER_BASEURL: ${DOMJUDGE_PROTOCOL:-https}://${DOMJUDGE_HOST:?}/
   judgehost-3:
     container_name: judgehost-3
     image: domjudge/judgehost:7.3.3
     hostname: judgedaemon-3
+    privileged: True
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     environment:
@@ -37,4 +40,4 @@ services:
       CONTAINER_TIMEZONE: Europe/Vienna
       JUDGEDAEMON_USERNAME: judgehost
       JUDGEDAEMON_PASSWORD: ${JUDGEDAEMON_PASSWORD:?}
-      DOMSERVER_BASEURL: ${DOMSERVER_PROTOCOL:-https}://${DOMSERVER_URL:?}
+      DOMSERVER_BASEURL: ${DOMJUDGE_PROTOCOL:-https}://${DOMJUDGE_HOST:?}/
