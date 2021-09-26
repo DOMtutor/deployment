@@ -1,0 +1,62 @@
+version: "3.8"
+
+volumes:
+  mariadb_data: {}
+
+networks:
+  domjudge:
+    driver: bridge
+
+services:
+  mariadb:
+    container_name: domjudge_mariadb
+    image: mariadb:10.6
+    networks:
+      - domjudge
+    ports:
+      - 3306:3306/tcp
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: domjudge
+      MARIADB_PASSWORD: domjudge
+      MARIADB_DATABASE: domjudge
+    
+  domserver:
+    container_name: domjudge
+    image: domserver
+    networks:
+      - domjudge
+    ports:
+      - 12345:80/tcp
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: domjudge
+      MYSQL_PASSWORD: domjudge
+      MYSQL_DATABASE: domjudge
+      CONTAINER_TIMEZONE: Europe/Vienna
+
+  judgehost-1:
+    container_name: judgehost-1
+    hostname: judgedaemon-1
+    image: judgehost
+    networks:
+      - domjudge
+    restart: unless-stopped
+    privileged: True
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    depends_on:
+      - domserver
+    environment:
+      DAEMON_ID: 1
+      CONTAINER_TIMEZONE: Europe/Vienna
+      JUDGEDAEMON_USERNAME: judgehost
+      JUDGEDAEMON_PASSWORD: judgepass
+      DOMSERVER_BASEURL: http://domjudge/

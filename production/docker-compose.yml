@@ -1,0 +1,119 @@
+version: "3.8"
+
+networks:
+  domjudge:
+    driver: bridge
+
+volumes:
+  mariadb_data: {}
+  mariadb_backup: {}
+
+services:
+  mariadb:
+    container_name: domjudge_mariadb
+    image: mariadb:10.6
+    networks:
+      - domjudge
+    ports:
+      - 33060:3306/tcp
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?}
+      MARIADB_USER: domjudge
+      MARIADB_PASSWORD: ${DB_DOMJUDGE_PASSWORD:?}
+      MARIADB_DATABASE: domjudge
+
+  mariadb-backup:
+    container_name: domjudge_mariadb_backup
+    image: fradelg/mysql-cron-backup:1.8.1
+    networks:
+      - domjudge
+    volumes:
+      - mariadb_backup:/backup
+    restart: unless-stopped
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASS: ${DB_ROOT_PASSWORD:?}
+      CRON_TIME: 12 */6 * * *
+      MAX_BACKUPS: 12
+      INIT_BACKUP: 1
+      TZ: Europe/Vienna
+    
+  domserver:
+    container_name: domjudge
+    image: incaseoftrouble/ist_domserver:latest
+    networks:
+      - domjudge
+    ports:
+      - 8080:80/tcp
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?}
+      MYSQL_USER: domjudge
+      MYSQL_PASSWORD: ${DB_DOMJUDGE_PASSWORD:?}
+      MYSQL_DATABASE: domjudge
+      CONTAINER_TIMEZONE: Europe/Vienna
+
+  judgehost-1:
+    container_name: judgehost-1
+    hostname: judgedaemon-1
+    image: incaseoftrouble/ist_judgehost:latest
+    networks:
+      - domjudge
+    privileged: True
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    restart: unless-stopped
+    depends_on:
+      - domserver
+    environment:
+      DAEMON_ID: 1
+      CONTAINER_TIMEZONE: Europe/Vienna
+      JUDGEDAEMON_USERNAME: judgehost
+      JUDGEDAEMON_PASSWORD: ${JUDGE_PASSWORD-}
+      DOMSERVER_BASEURL: http://domjudge/
+
+  judgehost-2:
+    container_name: judgehost-2
+    hostname: judgedaemon-2
+    image: incaseoftrouble/ist_judgehost:latest
+    networks:
+      - domjudge
+    privileged: True
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    restart: unless-stopped
+    depends_on:
+      - domserver
+    environment:
+      DAEMON_ID: 2
+      CONTAINER_TIMEZONE: Europe/Vienna
+      JUDGEDAEMON_USERNAME: judgehost
+      JUDGEDAEMON_PASSWORD: ${JUDGE_PASSWORD-}
+      DOMSERVER_BASEURL: http://domjudge/
+
+  judgehost-3:
+    container_name: judgehost-3
+    hostname: judgedaemon-3
+    image: incaseoftrouble/ist_judgehost:latest
+    networks:
+      - domjudge
+    privileged: True
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    restart: unless-stopped
+    depends_on:
+      - domserver
+    environment:
+      DAEMON_ID: 3
+      CONTAINER_TIMEZONE: Europe/Vienna
+      JUDGEDAEMON_USERNAME: judgehost
+      JUDGEDAEMON_PASSWORD: ${JUDGE_PASSWORD-}
+      DOMSERVER_BASEURL: http://domjudge/
