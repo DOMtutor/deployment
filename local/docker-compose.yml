@@ -41,6 +41,7 @@ services:
       MYSQL_PASSWORD: domjudge
       MYSQL_DATABASE: domjudge
       CONTAINER_TIMEZONE: Europe/Vienna
+      DJ_DB_INSTALL_BARE: 1
 
   judgehost-1:
     container_name: judgehost-1
