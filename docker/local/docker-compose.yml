@@ -10,7 +10,7 @@ networks:
 services:
   mariadb:
     container_name: domjudge_mariadb
-    image: mariadb:10.6
+    image: mariadb:10.8
     networks:
       - domjudge
     ports:
