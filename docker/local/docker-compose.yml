@@ -26,7 +26,7 @@ services:
     
   domserver:
     container_name: domjudge
-    image: domserver
+    image: incaseoftrouble/domtutor_domserver
     networks:
       - domjudge
     ports:
@@ -46,7 +46,7 @@ services:
   judgehost:
     container_name: judgehost
     hostname: judgehost
-    image: judgehost
+    image: incaseoftrouble/domtutor_judgehost
     networks:
       - domjudge
     restart: unless-stopped
