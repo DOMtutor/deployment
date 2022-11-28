@@ -45,7 +45,7 @@ services:
     
   domserver:
     container_name: domjudge
-    image: incaseoftrouble/ist_domserver:latest
+    image: incaseoftrouble/domtutor_domserver
     networks:
       - domjudge
     ports:
@@ -81,7 +81,7 @@ services:
   judgehost-1:
     container_name: judgehost-1
     hostname: judgedaemon-1
-    image: incaseoftrouble/ist_judgehost:latest
+    image: incaseoftrouble/domtutor_judgehost
     networks:
       - domjudge
     privileged: True
@@ -100,7 +100,7 @@ services:
   judgehost-2:
     container_name: judgehost-2
     hostname: judgedaemon-2
-    image: incaseoftrouble/ist_judgehost:latest
+    image: incaseoftrouble/domtutor_judgehost
     networks:
       - domjudge
     privileged: True
@@ -119,7 +119,7 @@ services:
   judgehost-3:
     container_name: judgehost-3
     hostname: judgedaemon-3
-    image: incaseoftrouble/ist_judgehost:latest
+    image: incaseoftrouble/domtutor_judgehost
     networks:
       - domjudge
     privileged: True
