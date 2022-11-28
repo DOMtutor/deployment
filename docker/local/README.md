@@ -11,3 +11,4 @@
 ## Cgroup errors
 
  * On linux, you need to add `cgroup_enable=memory swapaccount=1` to your cmdline (e.g. `/etc/default/grub` and `sudo update-grub2`)
+ * It may be needed to add `systemd.unified_cgroup_hierarchy=0` too on some modern system
